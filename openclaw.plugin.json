@@ -1,0 +1,106 @@
+{
+  "id": "restaurant-cli",
+  "name": "Restaurant",
+  "description": "Pluggable restaurant reservations. Resy: full search/availability/book/cancel via a documented token. OpenTable and Tock: search/availability only (read-only), via live-site automation since neither has an official public API. SevenRooms: planned.",
+  "skills": [
+    "skills/restaurant"
+  ],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "resy_apiKey": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "Resy public API key"
+          },
+          {
+            "type": "object",
+            "description": "SecretRef for Resy API key",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "env",
+                  "file"
+                ]
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "secrets"
+                ],
+                "description": "Secret backend. Only \"secrets\" (~/.openclaw/secrets.json) is supported."
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "id"
+            ]
+          }
+        ]
+      },
+      "resy_authToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "Resy user auth token"
+          },
+          {
+            "type": "object",
+            "description": "SecretRef for Resy auth token",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "env",
+                  "file"
+                ]
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "secrets"
+                ],
+                "description": "Secret backend. Only \"secrets\" (~/.openclaw/secrets.json) is supported."
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "id"
+            ]
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "uiHints": {
+    "resy_apiKey": {
+      "label": "Resy API Key",
+      "sensitive": true,
+      "help": "Resy.com → DevTools → Network → any API call → copy api_key from the Authorization header."
+    },
+    "resy_authToken": {
+      "label": "Resy Auth Token",
+      "sensitive": true,
+      "help": "Resy.com → DevTools → Network → any API call → copy X-Resy-Auth-Token header."
+    }
+  },
+  "contracts": {
+    "tools": [
+      "restaurant_search",
+      "restaurant_availability",
+      "restaurant_book",
+      "restaurant_cancel",
+      "restaurant_list",
+      "restaurant_schedule_snipe"
+    ]
+  }
+}
